@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#f5f6f8" />
+  <meta name="description" content="PairVault: Namen und Passwörter ohne Entsperrpasswort lokal archivieren und einzeln kopieren." />
+  <title>PairVault – Dein privates Archiv</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="stylesheet" href="./styles.css?v=3" />
+  <script src="./app.js?v=3" defer></script>
+</head>
+<body>
+  <main class="app" id="app">
+    <header class="brand">
+      <img src="./icon-192.png" alt="PairVault App-Icon" class="brand-icon" />
+      <div class="brand-text">
+        <div class="brand-eyebrow">PRIVATES ARCHIV</div>
+        <h1>PairVault</h1>
+      </div>
+    </header>
+
+    <section id="mainView" class="main-view">
+      <div id="appNotice" class="app-notice" role="status" hidden></div>
+      <nav class="tabs" aria-label="Ansichten">
+        <button id="tabEntry" class="tab active" type="button" aria-selected="true" role="tab" aria-controls="entryView">Eintragen</button>
+        <button id="tabArchive" class="tab" type="button" aria-selected="false" role="tab" aria-controls="archiveView">Archiv <span id="archiveTabCount" class="tab-count">0</span></button>
+      </nav>
+
+      <section id="entryView" class="entry-view" role="tabpanel" aria-labelledby="tabEntry">
+        <div class="section-top">
+          <div class="section-eyebrow">NEUER EINTRAG</div>
+          <h2 id="entryTitle">Zugangsdaten speichern</h2>
+          <p class="subtle">Name und Passwort gehören immer zusammen.</p>
+        </div>
+        <form id="entryForm" class="entry-form" autocomplete="off">
+          <div class="field-block">
+            <label for="nameInput">Name <span class="field-meta">= Benutzername · max. 29 Zeichen</span></label>
+            <div class="field-line">
+              <input id="nameInput" type="text" maxlength="29" placeholder="z. B. Doris gauxbe" autocapitalize="off" autocomplete="off" spellcheck="false" required />
+              <button type="button" class="paste-button" data-target="nameInput" aria-label="Kopierten Text als Namen einsetzen">Einsetzen</button>
+            </div>
+          </div>
+          <div class="field-block">
+            <label for="passwordInput">Passwort</label>
+            <div class="field-line">
+              <input id="passwordInput" type="password" placeholder="Passwort einfügen" autocomplete="new-password" autocapitalize="off" spellcheck="false" required />
+              <button type="button" class="paste-button" data-target="passwordInput" aria-label="Kopierten Text als Passwort einsetzen">Einsetzen</button>
+            </div>
+          </div>
+          <label class="checkbox-line"><input id="showEntryPassword" type="checkbox" /> Passwort anzeigen</label>
+          <button class="primary-button save-button" type="submit" id="saveButton">Im Archiv speichern</button>
+          <button class="cancel-edit" type="button" id="cancelEdit" hidden>Bearbeiten abbrechen</button>
+        </form>
+        <div class="note"><span class="note-dot"></span> Nach dem Speichern werden beide Eingabefelder automatisch geleert.</div>
+        <div id="entryMessage" class="message" aria-live="polite"></div>
+      </section>
+
+      <section id="archiveView" class="archive-view" role="tabpanel" aria-labelledby="tabArchive" hidden>
+        <div class="archive-top">
+          <div>
+            <div class="section-eyebrow">DEINE EINTRÄGE</div>
+            <h2>Passwort-Archiv</h2>
+          </div>
+          <span class="count-pill" id="archiveCount">0 Namen</span>
+        </div>
+        <div class="search-wrap">
+          <svg class="search-glass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></svg>
+          <input id="searchInput" class="search-input" type="search" placeholder="Account suchen …" aria-label="Account im Archiv suchen" aria-autocomplete="list" aria-controls="searchSuggestions" autocomplete="off" autocapitalize="off" spellcheck="false" />
+          <div id="searchSuggestions" class="search-suggestions" role="listbox" aria-label="Passende Accounts" hidden></div>
+        </div>
+        <div id="archiveList" class="archive-list" aria-live="polite"></div>
+        <footer class="archive-footer">
+          <span><span class="footer-lock">●</span> Ohne Entsperrpasswort</span>
+          <button id="exportButton" type="button" class="footer-button" title="Unverschlüsseltes JSON-Backup speichern">Backup speichern</button>
+          <button id="importArchive" type="button" class="footer-button">Backup laden</button>
+        </footer>
+      </section>
+    </section>
+    <input id="backupInput" type="file" accept=".json,application/json" hidden />
+  </main>
+  <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
+</body>
+</html>
